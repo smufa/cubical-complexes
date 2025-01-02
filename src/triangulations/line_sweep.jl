@@ -1,3 +1,6 @@
+
+using Plots
+
 function do_segments_intersect(AB, CD)
     # form the matrix of the corresponding linear system
     A = [AB[:, 2]-AB[:, 1] CD[:, 1]-CD[:, 2]]
@@ -119,3 +122,5 @@ function visual_test_ls(num_points)
     # show the plot
     display(plot!())
 end
+
+visual_test_ls(20)
