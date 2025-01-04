@@ -176,21 +176,23 @@ function create_projective_plane(n)
     return projective_plane
 end
 
-
-torus = create_torus(6)
-klein_bottle = create_klein_bottle(6)
-projective_plane = create_projective_plane(6)
+# torus = create_torus(6)
+# klein_bottle = create_klein_bottle(6)
+# projective_plane = create_projective_plane(6)
 
 ### FILE ###
-file_path = "resources/snakesIm/1.im"
-file_grid = parse_im_data(file_path)
+# file_path = "../resources/snakesIm/1.im"
+# file_grid = parse_im_data(file_path)
 
-# create cubical complex and visualize
-(vertices, edges, squares, cubes) = cubical_complex(torus)
+# torus = zeros(Int, 10,10,10)
+# torus[2:7,2:7,2:7] .= 1
+# torus[4:5,1:10,4:5] .= 0
 
-print("Vertices: ", vertices)
-print("Edges: ", edges)
-print("Squares: ", squares)
-print("Cubes: ", cubes)
+# # create cubical complex and visualize
+# (vertices, edges, squares, cubes) = cubical_complex(torus)# |> maximal_sxes
+# print("Vertices: ", vertices)
+# print("Edges: ", edges)
+# print("Squares: ", squares)
+# print("Cubes: ", cubes)
 
-# visualize_cubical_complex(vertices, edges)
+# visualize_cubical_complex(vertices, edges, show_edges=false)
