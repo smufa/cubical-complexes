@@ -1,3 +1,4 @@
+include("geometric_objects.jl")
 using Base.Iterators
 using Plots
 
@@ -100,97 +101,37 @@ function visualize_cubical_complex(vertices, edges; show_edges=true, edge_color=
     display(plot!())
 end
 
-function create_torus(n)
-    torus = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
+println(create_klein_bottle_boundary(6))
+println(create_projective_plane_boundary(4))
 
-    for i in 1:n
-        for j in 1:n
-            for k in 1:n
-                if (i == 1 || j == 1 || i == n || j == n
-                    || i == 2 || j == 2 || i == n-1 || j == n-1)
-                    torus[i, j, 1] = 1
-                    torus[i, j, 2] = 1
-                end
-            end
-        end
-    end
+# torus_grid_2D = create_torus_grid_2D(6)
+# torus_grid_3D = create_torus_grid_3D(6)
 
-    return torus
-end
+# ## FILE ###
+# file_path = "resources/cupsIm/b1.im"
+# file_grid = parse_im_data(file_path)
 
-function create_klein_bottle(n)
-    # Create a 3D grid of size n x n x n
-    klein_bottle = zeros(Int, n, n, n)
-    
-    for x in 1:n
-        for y in 1:n
-            for z in 1:n
-                # Define the "walls" of the Klein bottle
-                if (x == 1 || x == n || y == 1 || y == n) # Outer walls
-                    klein_bottle[x, y, z] = 1
-                elseif z == 1 || z == n # Top and bottom
-                    klein_bottle[x, y, z] = 1
-                # elseif (x == y && z % (n ÷ 2) == 1) # Handle the twist
-                #     klein_bottle[x, y, z] = 1
-                end
-            end
-        end
-    end
-    
-    return klein_bottle
-end
+# # create cubical complex and visualize
+# (vertices, edges, squares, cubes) = cubical_complex(torus_grid_2D)
 
+# println("Vertices: ", vertices)
+# println("Edges: ", edges)
+# println("Squares: ", squares)
+# println("Cubes: ", cubes)
 
-function create_projective_plane(n)
-    projective_plane = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
+# V = length(vertices)
+# E = length(edges)
+# F = length(squares)
+# C = length(cubes)
 
-    # Set boundary values for projective plane (initial cube)
-    for i in 1:n
-        for j in 1:n
-            for k in 1:n
-                if (i == 1 || i == n || j == 1 || j == n || k == 1 || k == n)
-                    projective_plane[i, j, k] = 1
-                end
-            end
-        end
-    end
+# println("V: ", length(V))
+# println("E: ", length(E))
+# println("F: ", length(F))
+# println("C: ", length(C))
 
-    # Glue opposite edges (left-right, top-bottom, front-back)
-    projective_plane[1, :, :] .= projective_plane[n, :, :]  # Left-right
-    projective_plane[:, 1, :] .= projective_plane[:, n, :]  # Top-bottom
-    projective_plane[:, :, 1] .= projective_plane[:, :, n]  # Front-back
+# # Euler characteristic
+# chi = V - E + F - C
+# println("Euler char: ", chi)
+# println("")
 
-    # Glue opposite corners to simulate projective plane (antipodal points)
-    projective_plane[1, 1, 1] = projective_plane[n, n, n]  # Top-left-front to bottom-right-back
-    projective_plane[n, 1, 1] = projective_plane[1, n, n]  # Bottom-left-front to top-right-back
-
-    return projective_plane
-end
-
-torus = create_torus(6)
-klein_bottle = create_klein_bottle(6)
-# projective_plane = create_projective_plane(6)
-
-## FILE ###
-file_path = "resources/cupsIm/b1.im"
-file_grid = parse_im_data(file_path)
-
-# create cubical complex and visualize
-(vertices, edges, squares, cubes) = cubical_complex(file_grid)
-println("Vertices: ", length(vertices))
-println("Edges: ", length(edges))
-println("Squares: ", length(squares))
-println("Cubes: ", length(cubes))
-
-
-V = length(vertices)  # Number of vertices (0-cells)
-E = length(edges)     # Number of edges (1-cells)
-F = length(squares)   # Number of squares (2-cells)
-C = length(cubes)     # Number of cubes (3-cells)
-
-# Euler characteristic
-chi = V - E + F - C
-println("Euler char: ", chi)
-println("")
-
-visualize_cubical_complex(vertices, edges, show_edges=false)
+# visualize_cubical_complex(vertices, edges, show_edges=true)
