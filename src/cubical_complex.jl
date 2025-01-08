@@ -1,3 +1,4 @@
+include("geometric_objects.jl")
 using Base.Iterators
 using Plots
 
@@ -100,99 +101,37 @@ function visualize_cubical_complex(vertices, edges; show_edges=true, edge_color=
     display(plot!())
 end
 
-function create_torus(n)
-    torus = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
+println(create_klein_bottle_boundary(6))
+println(create_projective_plane_boundary(4))
 
-    for i in 1:n
-        for j in 1:n
-            for k in 1:n
-                # Set boundary values
-                if (i == 1 || i == n || j == 1 || j == n || k == 1 || k == n)
-                    torus[i, j, k] = 1
-                end
-            end
-        end
-    end
+# torus_grid_2D = create_torus_grid_2D(6)
+# torus_grid_3D = create_torus_grid_3D(6)
 
-    # Glue opposite edges
-    torus[1, :, :] .= torus[n, :, :]  # Glue top-bottom
-    torus[:, 1, :] .= torus[:, n, :]  # Glue left-right
-    torus[:, :, 1] .= torus[:, :, n]  # Glue front-back
-
-    return torus
-end
-
-function create_klein_bottle(n)
-    klein_bottle = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
-    
-    # Set boundary values
-    for i in 1:n
-        for j in 1:n
-            for k in 1:n
-                if (i == 1 || i == n || j == 1 || j == n || k == 1 || k == n)
-                    klein_bottle[i, j, k] = 1
-                end
-            end
-        end
-    end
-    
-    # Glue the left and right edges
-    klein_bottle[1, :, :] .= klein_bottle[n, :, :]  # Left-right (vertical edges)
-    
-    # Twist the top and bottom edges
-    for j in 1:n
-        klein_bottle[j, 1, :] = klein_bottle[n - j + 1, n, :]  # Twisted connection for top-bottom
-    end
-    
-    # Glue the front-back edges (no twist here)
-    klein_bottle[:, 1, :] .= klein_bottle[:, n, :]  # Front-back
-
-    return klein_bottle
-end
-
-function create_projective_plane(n)
-    projective_plane = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
-
-    # Set boundary values for projective plane (initial cube)
-    for i in 1:n
-        for j in 1:n
-            for k in 1:n
-                if (i == 1 || i == n || j == 1 || j == n || k == 1 || k == n)
-                    projective_plane[i, j, k] = 1
-                end
-            end
-        end
-    end
-
-    # Glue opposite edges (left-right, top-bottom, front-back)
-    projective_plane[1, :, :] .= projective_plane[n, :, :]  # Left-right
-    projective_plane[:, 1, :] .= projective_plane[:, n, :]  # Top-bottom
-    projective_plane[:, :, 1] .= projective_plane[:, :, n]  # Front-back
-
-    # Glue opposite corners to simulate projective plane (antipodal points)
-    projective_plane[1, 1, 1] = projective_plane[n, n, n]  # Top-left-front to bottom-right-back
-    projective_plane[n, 1, 1] = projective_plane[1, n, n]  # Bottom-left-front to top-right-back
-
-    return projective_plane
-end
-
-# torus = create_torus(6)
-# klein_bottle = create_klein_bottle(6)
-# projective_plane = create_projective_plane(6)
-
-### FILE ###
-# file_path = "../resources/snakesIm/1.im"
+# ## FILE ###
+# file_path = "resources/cupsIm/b1.im"
 # file_grid = parse_im_data(file_path)
 
-# torus = zeros(Int, 10,10,10)
-# torus[2:7,2:7,2:7] .= 1
-# torus[4:5,1:10,4:5] .= 0
-
 # # create cubical complex and visualize
-# (vertices, edges, squares, cubes) = cubical_complex(torus)# |> maximal_sxes
-# print("Vertices: ", vertices)
-# print("Edges: ", edges)
-# print("Squares: ", squares)
-# print("Cubes: ", cubes)
+# (vertices, edges, squares, cubes) = cubical_complex(torus_grid_2D)
 
-# visualize_cubical_complex(vertices, edges, show_edges=false)
+# println("Vertices: ", vertices)
+# println("Edges: ", edges)
+# println("Squares: ", squares)
+# println("Cubes: ", cubes)
+
+# V = length(vertices)
+# E = length(edges)
+# F = length(squares)
+# C = length(cubes)
+
+# println("V: ", length(V))
+# println("E: ", length(E))
+# println("F: ", length(F))
+# println("C: ", length(C))
+
+# # Euler characteristic
+# chi = V - E + F - C
+# println("Euler char: ", chi)
+# println("")
+
+# visualize_cubical_complex(vertices, edges, show_edges=true)
