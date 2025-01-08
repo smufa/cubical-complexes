@@ -1,8 +1,0 @@
-it think next thing to do is the boundry matrix function to compute betti numbers.
-we used oriented scx in lectures but I think it would work with nonoriented scx
-also and would be much easier to do, since im not sure how we would orient
-these cubical scx. also the cubical_complex function works well, so I
-think the problem you were having is when constructing the grid for the shapes.
-
-also sorry for the weird mix of sets and lists but if you agree that we do
-nonoriented i think its much easier with sets.
