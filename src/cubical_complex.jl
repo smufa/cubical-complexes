@@ -1,8 +1,9 @@
 include("geometric_objects.jl")
+include("simplicial_homology_q.jl")
 using Base.Iterators
 using Plots
 
-function parse_im_data(file_path::String)
+function parse_im_data(file_path, scale_factor=4)
     # Open the file for reading
     open(file_path, "r") do fid
         # Skip the 1024-byte header
@@ -21,7 +22,7 @@ function parse_im_data(file_path::String)
     end
 end
 
-function cubical_complex(input_grid)
+function cubical_complex(input_grid, inclusion_threshold=0)
     vertices = []
     edges = []
     squares = []
@@ -30,7 +31,7 @@ function cubical_complex(input_grid)
     # Iterate over the 3D grid to extract vertices
     for I in CartesianIndices(input_grid)
         i, j, k = Tuple(I)
-        if input_grid[i, j, k] > 0  # Example condition for inclusion in the complex
+        if input_grid[i, j, k] > inclusion_threshold
             # Add the vertex
             push!(vertices, (i, j, k))
         end
@@ -39,37 +40,37 @@ function cubical_complex(input_grid)
     # Extract edges, squares, and cubes
     for I in CartesianIndices(input_grid)
         i, j, k = Tuple(I)
-        if input_grid[i, j, k] > 0
+        if input_grid[i, j, k] > inclusion_threshold
             # Check for edges along each axis
-            if i < size(input_grid, 1) && input_grid[i + 1, j, k] > 0
+            if i < size(input_grid, 1) && input_grid[i + 1, j, k] > inclusion_threshold
                 push!(edges, ((i, j, k), (i + 1, j, k)))
             end
-            if j < size(input_grid, 2) && input_grid[i, j + 1, k] > 0
+            if j < size(input_grid, 2) && input_grid[i, j + 1, k] > inclusion_threshold
                 push!(edges, ((i, j, k), (i, j + 1, k)))
             end
-            if k < size(input_grid, 3) && input_grid[i, j, k + 1] > 0
+            if k < size(input_grid, 3) && input_grid[i, j, k + 1] > inclusion_threshold
                 push!(edges, ((i, j, k), (i, j, k + 1)))
             end
 
             # Check for squares in the XY, YZ, and XZ planes
             if i < size(input_grid, 1) && j < size(input_grid, 2) &&
-               input_grid[i + 1, j, k] > 0 && input_grid[i, j + 1, k] > 0 && input_grid[i + 1, j + 1, k] > 0
+               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i + 1, j + 1, k] > inclusion_threshold
                 push!(squares, ((i, j, k), (i + 1, j, k), (i, j + 1, k), (i + 1, j + 1, k)))
             end
             if j < size(input_grid, 2) && k < size(input_grid, 3) &&
-               input_grid[i, j + 1, k] > 0 && input_grid[i, j, k + 1] > 0 && input_grid[i, j + 1, k + 1] > 0
+               input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold && input_grid[i, j + 1, k + 1] > inclusion_threshold
                 push!(squares, ((i, j, k), (i, j + 1, k), (i, j, k + 1), (i, j + 1, k + 1)))
             end
             if i < size(input_grid, 1) && k < size(input_grid, 3) &&
-               input_grid[i + 1, j, k] > 0 && input_grid[i, j, k + 1] > 0 && input_grid[i + 1, j, k + 1] > 0
+               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold && input_grid[i + 1, j, k + 1] > inclusion_threshold
                 push!(squares, ((i, j, k), (i + 1, j, k), (i, j, k + 1), (i + 1, j, k + 1)))
             end
 
             # Check for cubes
             if i < size(input_grid, 1) && j < size(input_grid, 2) && k < size(input_grid, 3) &&
-               input_grid[i + 1, j, k] > 0 && input_grid[i, j + 1, k] > 0 && input_grid[i, j, k + 1] > 0 &&
-               input_grid[i + 1, j + 1, k] > 0 && input_grid[i + 1, j, k + 1] > 0 && input_grid[i, j + 1, k + 1] > 0 &&
-               input_grid[i + 1, j + 1, k + 1] > 0
+               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold &&
+               input_grid[i + 1, j + 1, k] > inclusion_threshold && input_grid[i + 1, j, k + 1] > inclusion_threshold && input_grid[i, j + 1, k + 1] > inclusion_threshold &&
+               input_grid[i + 1, j + 1, k + 1] > inclusion_threshold
                 push!(cubes, ((i, j, k), (i + 1, j, k), (i, j + 1, k), (i, j, k + 1),
                               (i + 1, j + 1, k), (i + 1, j, k + 1), (i, j + 1, k + 1), (i + 1, j + 1, k + 1)))
             end
@@ -100,38 +101,3 @@ function visualize_cubical_complex(vertices, edges; show_edges=true, edge_color=
 
     display(plot!())
 end
-
-println(create_klein_bottle_boundary(6))
-println(create_projective_plane_boundary(4))
-
-# torus_grid_2D = create_torus_grid_2D(6)
-# torus_grid_3D = create_torus_grid_3D(6)
-
-# ## FILE ###
-# file_path = "resources/cupsIm/b1.im"
-# file_grid = parse_im_data(file_path)
-
-# # create cubical complex and visualize
-# (vertices, edges, squares, cubes) = cubical_complex(torus_grid_2D)
-
-# println("Vertices: ", vertices)
-# println("Edges: ", edges)
-# println("Squares: ", squares)
-# println("Cubes: ", cubes)
-
-# V = length(vertices)
-# E = length(edges)
-# F = length(squares)
-# C = length(cubes)
-
-# println("V: ", length(V))
-# println("E: ", length(E))
-# println("F: ", length(F))
-# println("C: ", length(C))
-
-# # Euler characteristic
-# chi = V - E + F - C
-# println("Euler char: ", chi)
-# println("")
-
-# visualize_cubical_complex(vertices, edges, show_edges=true)
