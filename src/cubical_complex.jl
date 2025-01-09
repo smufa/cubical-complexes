@@ -22,7 +22,7 @@ function parse_im_data(file_path, scale_factor=4)
     end
 end
 
-function cubical_complex(input_grid, inclusion_threshold=0)
+function cubical_complex(input_grid, threshold=0)
     vertices = []
     edges = []
     squares = []
@@ -31,48 +31,50 @@ function cubical_complex(input_grid, inclusion_threshold=0)
     # Iterate over the 3D grid to extract vertices
     for I in CartesianIndices(input_grid)
         i, j, k = Tuple(I)
-        if input_grid[i, j, k] > inclusion_threshold
+        if input_grid[i, j, k] > 0
             # Add the vertex
             push!(vertices, (i, j, k))
         end
     end
 
-    # Extract edges, squares, and cubes
-    for I in CartesianIndices(input_grid)
-        i, j, k = Tuple(I)
-        if input_grid[i, j, k] > inclusion_threshold
-            # Check for edges along each axis
-            if i < size(input_grid, 1) && input_grid[i + 1, j, k] > inclusion_threshold
-                push!(edges, ((i, j, k), (i + 1, j, k)))
-            end
-            if j < size(input_grid, 2) && input_grid[i, j + 1, k] > inclusion_threshold
-                push!(edges, ((i, j, k), (i, j + 1, k)))
-            end
-            if k < size(input_grid, 3) && input_grid[i, j, k + 1] > inclusion_threshold
-                push!(edges, ((i, j, k), (i, j, k + 1)))
-            end
-
-            # Check for squares in the XY, YZ, and XZ planes
-            if i < size(input_grid, 1) && j < size(input_grid, 2) &&
-               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i + 1, j + 1, k] > inclusion_threshold
-                push!(squares, ((i, j, k), (i + 1, j, k), (i, j + 1, k), (i + 1, j + 1, k)))
-            end
-            if j < size(input_grid, 2) && k < size(input_grid, 3) &&
-               input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold && input_grid[i, j + 1, k + 1] > inclusion_threshold
-                push!(squares, ((i, j, k), (i, j + 1, k), (i, j, k + 1), (i, j + 1, k + 1)))
-            end
-            if i < size(input_grid, 1) && k < size(input_grid, 3) &&
-               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold && input_grid[i + 1, j, k + 1] > inclusion_threshold
-                push!(squares, ((i, j, k), (i + 1, j, k), (i, j, k + 1), (i + 1, j, k + 1)))
-            end
-
-            # Check for cubes
-            if i < size(input_grid, 1) && j < size(input_grid, 2) && k < size(input_grid, 3) &&
-               input_grid[i + 1, j, k] > inclusion_threshold && input_grid[i, j + 1, k] > inclusion_threshold && input_grid[i, j, k + 1] > inclusion_threshold &&
-               input_grid[i + 1, j + 1, k] > inclusion_threshold && input_grid[i + 1, j, k + 1] > inclusion_threshold && input_grid[i, j + 1, k + 1] > inclusion_threshold &&
-               input_grid[i + 1, j + 1, k + 1] > inclusion_threshold
-                push!(cubes, ((i, j, k), (i + 1, j, k), (i, j + 1, k), (i, j, k + 1),
-                              (i + 1, j + 1, k), (i + 1, j, k + 1), (i, j + 1, k + 1), (i + 1, j + 1, k + 1)))
+    for current_threshold in 1:threshold
+        # Extract edges, squares, and cubes
+        for I in CartesianIndices(input_grid)
+            i, j, k = Tuple(I)
+            if input_grid[i, j, k]> 0
+                # Check for edges along each axis
+                if i + current_threshold <= size(input_grid, 1) && input_grid[i + current_threshold, j, k]> 0
+                    push!(edges, ((i, j, k), (i + current_threshold, j, k)))
+                end
+                if j + current_threshold <= size(input_grid, 2) && input_grid[i, j + current_threshold, k]> 0
+                    push!(edges, ((i, j, k), (i, j + current_threshold, k)))
+                end
+                if k + current_threshold <= size(input_grid, 3) && input_grid[i, j, k + current_threshold]> 0
+                    push!(edges, ((i, j, k), (i, j, k + current_threshold)))
+                end
+    
+                # Check for squares in the XY, YZ, and XZ planes
+                if i + current_threshold <= size(input_grid, 1) && j + current_threshold <= size(input_grid, 2) &&
+                   input_grid[i + current_threshold, j, k]> 0 && input_grid[i, j + current_threshold, k]> 0 && input_grid[i + current_threshold, j + current_threshold, k]> 0
+                    push!(squares, ((i, j, k), (i + current_threshold, j, k), (i, j + current_threshold, k), (i + current_threshold, j + current_threshold, k)))
+                end
+                if j + current_threshold <= size(input_grid, 2) && k + current_threshold <= size(input_grid, 3) &&
+                   input_grid[i, j + current_threshold, k]> 0 && input_grid[i, j, k + current_threshold]> 0 && input_grid[i, j + current_threshold, k + current_threshold]> 0
+                    push!(squares, ((i, j, k), (i, j + current_threshold, k), (i, j, k + current_threshold), (i, j + current_threshold, k + current_threshold)))
+                end
+                if i + current_threshold <= size(input_grid, 1) && k + current_threshold <= size(input_grid, 3) &&
+                   input_grid[i + current_threshold, j, k]> 0 && input_grid[i, j, k + current_threshold]> 0 && input_grid[i + current_threshold, j, k + current_threshold]> 0
+                    push!(squares, ((i, j, k), (i + current_threshold, j, k), (i, j, k + current_threshold), (i + current_threshold, j, k + current_threshold)))
+                end
+    
+                # Check for cubes
+                if i + current_threshold <= size(input_grid, 1) && j + current_threshold <= size(input_grid, 2) && k + current_threshold <= size(input_grid, 3) &&
+                   input_grid[i + current_threshold, j, k]> 0 && input_grid[i, j + current_threshold, k]> 0 && input_grid[i, j, k + current_threshold]> 0 &&
+                   input_grid[i + current_threshold, j + current_threshold, k]> 0 && input_grid[i + current_threshold, j, k + current_threshold]> 0 && input_grid[i, j + current_threshold, k + current_threshold]> 0 &&
+                   input_grid[i + current_threshold, j + current_threshold, k + current_threshold]> 0
+                    push!(cubes, ((i, j, k), (i + current_threshold, j, k), (i, j + current_threshold, k), (i, j, k + current_threshold),
+                                  (i + current_threshold, j + current_threshold, k), (i + current_threshold, j, k + current_threshold), (i, j + current_threshold, k + current_threshold), (i + current_threshold, j + current_threshold, k + current_threshold)))
+                end
             end
         end
     end
