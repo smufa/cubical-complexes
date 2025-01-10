@@ -93,3 +93,48 @@ function create_projective_plane_boundary(n)
 
     return (edges, squares)
 end
+
+function create_sphere_grid_3D(n::Int; radius=0)
+    grid = zeros(Int, n, n, n)  # Initialize all values to 0
+    center = (div(n, 2), div(n, 2), div(n, 2))
+    radius = radius > 0 ? radius : div(n, 3)
+    for i in 1:n, j in 1:n, k in 1:n
+        if norm((i, j, k) .- center) <= radius
+            grid[i, j, k] = 1  # Mark as present
+        end
+    end
+    return grid
+end
+
+function create_hollow_cube_grid_3D(n::Int; thickness=1)
+    grid = zeros(Int, n, n, n)  # Initialize all values to 0
+    for i in 1:n, j in 1:n, k in 1:n
+        if (i <= thickness || i > n - thickness ||
+            j <= thickness || j > n - thickness ||
+            k <= thickness || k > n - thickness)
+            grid[i, j, k] = 1  # Mark as present
+        end
+    end
+    return grid
+end
+
+function create_twist_grid_3D(n::Int; twist_factor=5)
+    grid = zeros(Int, n, n, n)  # Initialize all values to 0
+    for i in 1:n, j in 1:n, k in 1:n
+        if abs(i - div(n, 2)) <= twist_factor * sin(2 * π * (j / n)) &&
+           abs(k - div(n, 2)) <= twist_factor * sin(2 * π * (j / n))
+            grid[i, j, k] = 1  # Mark as present
+        end
+    end
+    return grid
+end
+
+function create_random_grid_3D(n::Int; density=0.1)
+    grid = zeros(Int, n, n, n)  # Initialize all values to 0
+    for i in 1:n, j in 1:n, k in 1:n
+        if rand() < density
+            grid[i, j, k] = 1  # Mark as present
+        end
+    end
+    return grid
+end

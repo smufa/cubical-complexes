@@ -22,7 +22,7 @@ function parse_im_data(file_path, scale_factor=4)
     end
 end
 
-function cubical_complex(input_grid, threshold=0)
+function cubical_complex(input_grid, threshold=1)
     vertices = []
     edges = []
     squares = []
