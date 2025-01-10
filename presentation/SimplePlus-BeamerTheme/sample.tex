@@ -44,6 +44,7 @@
 \section{Intdroduction}
 %------------------------------------------------
 
+
 \begin{frame}{Introduction}
     \textbf{What are Cubical Complexes?}
     \begin{itemize}
@@ -55,6 +56,31 @@
             \item \textbf{2-cubes:} Squares
         \end{itemize}
         \item Applications in image analysis and higher-dimensional data.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Motivation}
+    \textbf{Why Do We Need Cubical Complexes?}
+    \begin{itemize}
+        \item \textbf{Natural for Grid-Based Data:}
+        \begin{itemize}
+            \item Many datasets (e.g., images, videos) are naturally structured as grids.
+            \item Cubical complexes align directly with pixel/voxel layouts.
+        \end{itemize}
+        
+        \item \textbf{Efficiency in Construction:}
+        \begin{itemize}
+            \item Avoids the overhead of triangulating grid-based data.
+            \item Simple enumeration of cubes with systematic coordinates.
+        \end{itemize}
+        
+        \item \textbf{Applications in Image Analysis:}
+        \begin{itemize}
+            \item Enables topological analysis of shapes, textures, and regions in images.
+            \item Extends to higher dimensions for 3D volumes or dynamic video data.
+        \end{itemize}
+        
+        \item \textbf{A Discrete World}
     \end{itemize}
 \end{frame}
 
@@ -108,20 +134,48 @@
 %------------------------------------------------
 
 \begin{frame}{Homology}
-    TODO explain Homology (You)
+    \textbf{Steps to Compute Homology of a Cubical Complex}
+    \begin{itemize}
+        \item Define border of a simplex.
+        \item Compute the boundary matrix for $n$.
+        \item Compute the boundary matrix for $n + 1$.
+        \item Simultaneously reduce both matrices.
+        \item Compute betti number with rank of reduced matrix
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
-\section{Examples}
+\section{Homology - What's different?}
 %------------------------------------------------
 
-\begin{frame}{Images}
-    TODO show some examples (e.g. images, complex objects etc.) (Together)
+\begin{frame}{Homology - What's different?}
+    \textbf{How is computing homology different in this system?}
+    \begin{itemize}
+        \item Main difference is in computing the simplex boundary.
+        \item Because we construct the cubical complex, we can make sure it's oriented.
+        \item We construct the border simplices to follow the same orientation.
+        \item Can be very hard as grids produce many simplicies even at small sizes.
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{References}
-    \footnotesize
-    \bibliography{reference.bib}
-    \bibliographystyle{apalike}
+%------------------------------------------------
+\section{Persistent Homology}
+%------------------------------------------------
+
+
+%------------------------------------------------
+\begin{frame}{Persistent Homology on Cubical Complexes}
+    \textbf{Extending Persistent Homology to Cubical Complexes}
+    \textbf{Key Steps:}
+    \begin{enumerate}
+        \item \textbf{Filtration:} 
+        \begin{itemize}
+            \item Construct a sequence of subcomplexes \(K_1 \subseteq K_2 \subseteq \dots \subseteq K_n\) by adding cubes based on a threshold (e.g., pixel intensity or distance).
+        \end{itemize}
+        \item \textbf{Persistence:} Identify when features (e.g., components, loops) are created (birth) and destroyed (death).
+        \item \textbf{Output:} Visualize persistence as \textbf{barcodes} or \textbf{persistence diagrams}.
+    \end{enumerate}
+
 \end{frame}
+
 \end{document}
