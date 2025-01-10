@@ -106,7 +106,7 @@ complexes = get_complexes(initial_grid, 10)
 
 for complex in complexes
     (vertices, edges, squares, cubes) = complex
-    visualize_cubical_complex(vertices, edges)
+    visualize_cubical_complex(vertices, edges, squares, cubes)
 end
 
 ph = persistent_homology(complexes)
