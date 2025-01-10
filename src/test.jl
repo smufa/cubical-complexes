@@ -101,7 +101,7 @@ end
 
 
 
-initial_grid = create_random_grid_3D(10)
+initial_grid = create_torus_grid_3D(10)
 complexes = get_complexes(initial_grid, 10)
 
 for complex in complexes

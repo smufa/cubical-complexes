@@ -44,20 +44,63 @@
 \section{Intdroduction}
 %------------------------------------------------
 
-\begin{frame}{Intdroduction}
-    TODO explain cubical complexes (Simon)
+\begin{frame}{Introduction}
+    \textbf{What are Cubical Complexes?}
+    \begin{itemize}
+        \item Cubical complexes are structures built using cubes as building blocks.
+        \item They generalize simplicial complexes by using:
+        \begin{itemize}
+            \item \textbf{0-cubes:} Vertices
+            \item \textbf{1-cubes:} Edges (horizontal or vertical)
+            \item \textbf{2-cubes:} Squares
+        \end{itemize}
+        \item Applications in image analysis and higher-dimensional data.
+    \end{itemize}
 \end{frame}
 
 %------------------------------------------------
 
 \begin{frame}{Generation of Cubical Complexes}
-    TODO explain the generation (Simon)
+    \textbf{Steps to Construct Cubical Complexes:}
+    \begin{enumerate}
+        \item Define a grid structure (e.g., \( n \times n \)).
+        \item Assign coordinates to vertices, edges, and squares.
+        \item Ensure orientation is consistent (e.g., positive rotational order for squares).
+        \item Apply boundary conditions for chain construction.
+    \end{enumerate}
+
+    \vspace{1em}
+    \textbf{Key Feature:} Each cube is labeled systematically for easy computation.
 \end{frame}
 
 %------------------------------------------------
 
-\begin{frame}{Expample: Torus}
-    TODO Show the generation of a tours (Simon)
+\begin{frame}{Example: 2D-Torus}
+    \textbf{Generating a 2D-Torus using Cubical Complexes}
+    \begin{itemize}
+        \item Represent a torus as a 2D grid with periodic boundary conditions.
+        \item Connect edges of the grid (left to right, top to bottom).
+        \item Visualize the transformation from a grid to a torus shape.
+    \end{itemize}
+
+    \vspace{1em}
+    \centering
+    \includegraphics[width=0.5\textwidth]{torus2D.png} % Replace with actual image path
+\end{frame}
+
+%------------------------------------------------
+
+\begin{frame}{Example: 3D-Torus}
+    \textbf{Generating a 3D-Torus (filled) using Cubical Complexes}
+    \begin{itemize}
+        \item Represent a torus as a 2D grid with periodic boundary conditions.
+        \item Connect edges of the grid (left to right, top to bottom).
+        \item Visualize the transformation from a grid to a torus shape.
+    \end{itemize}
+
+    \vspace{1em}
+    \centering
+    \includegraphics[width=0.5\textwidth]{torus3D.png} % Replace with actual image path
 \end{frame}
 
 %------------------------------------------------
