@@ -65,7 +65,7 @@ function cubical_complex(input_grid)
     for (x,y,z) in squares
         #check for cube
         if isodd(x) && isodd(y)
-            if (x,y,z+2) in squares && (x+1,y-1,z) in squares && (x-1,y+1,z) in squares && (x,y-1,z+1) in squares && (x,y+1,z+1) in squares
+            if (x,y,z+2) in squares && (x+1,y+1,z) in squares && (x-1,y+1,z) in squares && (x,y-1,z+1) in squares && (x,y+1,z+1) in squares
                 push!(cubes, (x,y,z+1))
             end
         end
