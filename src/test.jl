@@ -1,4 +1,4 @@
-include("cubical_complex.jl")
+include("creator.jl")
 include("geometric_objects.jl")
 include("simplicial_homology_q.jl")
 using Base.Iterators: filter
@@ -98,42 +98,9 @@ function plot_persistent_homology(ph_data; infinite_value=1e3)
 
     return plt
 end
-# torus = create_torus_grid_3D(5)
-# torus[4:6, :, :] .= 0
-torus = ones(Int64, 2,2,2)
 
 
-# (vertices, edges, squares, cubes) = cubical_complex(torus, 1)
-#
-# println(length(vertices))
-# println(length(edges))
-# println(length(squares))
-# println(length(cubes))
+torus = create_torus_grid_3D(5)
 
-# visualize
-# visualize_cubical_complex(vertices, edges, squares, cubes)
-# println(betti_numbers((vertices, edges, squares, cubes)))
-# initial_grid = create_random_grid_3D(10)
-# complexes = get_complexes(initial_grid, 10)
-
-# for complex in complexes
-#     (vertices, edges, squares, cubes) = complex
-#     visualize_cubical_complex(vertices, edges, squares, cubes)
-# end
-
-# ph = persistent_homology(complexes)
-# println(ph)
-plot_persistent_homology(Dict(0=> [(0, Inf), (0, 4)], 1=> [(4, 8)], 2=> []), infinite_value=10)
-
-# for complex in complexes
-#     (vertices, edges, squares, cubes) = complex
-
-#     visualize_cubical_complex(vertices, edges)
-
-#     println("vertices: ", length(vertices))
-#     println("edges: ", length(edges))
-#     println("squares: ", length(squares))
-#     println("cubes: ", length(cubes))
-
-#     println("")
-# end
+(vertices, edges, squares, cubes) = cubical_complex(torus)
+println((vertices, edges, squares, cubes))
