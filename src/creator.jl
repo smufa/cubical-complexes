@@ -18,16 +18,10 @@ function parse_im_data(file_path, scale_factor=4)
 end
 
 function cubical_complex(input_grid)
-    verticies_to_check = []
-    edges_to_check = []
-    squares_to_check = []
-
     vertices = []
     edges = []
     squares = []
     cubes = []
-
-    grid_size = 0
 
     # Iterate over the 3D grid to extract vertices
     for I in CartesianIndices(input_grid)
@@ -35,49 +29,45 @@ function cubical_complex(input_grid)
         if input_grid[i, j, k] > 0
             # Add the vertex
             push!(vertices, (i*2, j*2, k*2))
-            push!(verticies_to_check, (i, j, k))
         end
-        grid_size = i
     end
 
     # Extract edges
-    for (i, j, k) in verticies_to_check
-        if i == grid_size || j == grid_size || k == grid_size
-            break
-        end
-        if input_grid[i + 1, j, k] > 0
-            push!(edges, (i*2 + 1, j*2, k*2))
-            push!(edges_to_check, (i, j, k))
-        elseif input_grid[i, j + 1, k] > 0
-            push!(edges, (i*2, j*2 + 1, k*2))
-            push!(edges_to_check, (i, j, k))
-        else  input_grid[i, j, k + 1] > 0
-            push!(edges, (i*2, j*2, k*2 + 1))
-            push!(edges_to_check, (i, j, k))
+    for (x,y,z) in vertices
+        if (x+2, y, z) in vertices
+            push!(edges, (x-1, y, z))
+        elseif (x, y+2, z) in vertices
+            push!(edges, (x, y-1, z))
+        elseif (x, y, z+2) in vertices
+            push!(edges, (x, y, z-1))
         end
     end
 
     # extract squares
-    for (i, j, k) in edges_to_check
-        if i == grid_size || j == grid_size || k == grid_size
-            break
-        end
-        if input_grid[i + 1, j + 1, k] > 0 && input_grid[i + 1, j, k] > 0 && input_grid[i, j + 1, k] > 0
-            push!(squares, (i*2 + 1, j*2 + 1, k*2))
-            push!(squares_to_check, (i, j, k))
-        elseif  input_grid[i + 1, j, k + 1] > 0 && input_grid[i + 1, j, k] > 0 && input_grid[i, j, k + 1] > 0
-            push!(squares, (i*2 + 1, j*2, k*2 + 1))
-            push!(squares_to_check, (i, j, k))
-        else  input_grid[i, j + 1, k + 1] > 0 && input_grid[i, j + 1, k] > 0 && input_grid[i, j, k + 1] > 0
-            push!(squares, (i*2, j*2 + 1, k*2 + 1))
-            push!(squares_to_check, (i, j, k))
+    for (x,y,z) in edges
+        if isodd(x)
+            # check for square in y direction
+            if (x-1, y+1, z) in vertices && (x+1, y+1, z) in vertices && (x, y+2, z) in vertices
+                push!(squares, (x, y+1, z))
+            # check for square in z direction
+            elseif (x-1, y, z+1) in vertices && (x+1, y, z+1) in vertices && (x, y, z+2) in vertices
+                push!(squares, (x, y, z+1))
+            end
+        elseif isodd(y)
+            # check for square in x direction
+            if (x, y-1, z+1) in vertices && (x, y+1, z+1) in vertices && (x+2, y, z) in vertices
+                push!(squares, (x+1, y, z))
+            end
         end
     end
 
     # extract cubes
-    for (i, j, k) in edges_to_check
-        if input_grid[i + 1, j + 1, k + 1] > 0 && input_grid[i + 1, j, k] > 0 && input_grid[i, j + 1, k] > 0 && input_grid[i, j, k + 1] > 0 && input_grid[i, j + 1, k + 1] > 0 && input_grid[i+ 1, j, k + 1] > 0 && input_grid[i + 1, j + 1, k] > 0
-            push!(cubes, (i*2 + 1, j*2 + 1, k*2 + 1))
+    for (x,y,z) in squares
+        #check for cube
+        if isodd(x) && isodd(y)
+            if (x,y,z+2) in squares && (x+1,y-1,z) in squares && (x-1,y+1,z) in squares && (x,y-1,z+1) in squares && (x,y+1,z+1) in squares
+                push!(cubes, (x,y,z+1))
+            end
         end
     end
 
