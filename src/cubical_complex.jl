@@ -83,14 +83,16 @@ function cubical_complex(input_grid, threshold=1)
 end
 
 
-function visualize_cubical_complex(vertices, edges, squares, cubes; show_edges=true, edge_color=:blue, square_color=:lightblue, cube_color=:lightgreen)
+function visualize_cubical_complex(vertices, edges, squares, cubes; show_vertices=true, show_edges=true, show_cubes=false, show_squares=false, edge_color=:blue, square_color=:lightblue, cube_color=:lightgreen)
     # Extract x, y, z coordinates for vertices
     x = [v[1] for v in vertices]
     y = [v[2] for v in vertices]
     z = [v[3] for v in vertices]
-
+    p = plot!()
     # Create a scatter plot for vertices
-    scatter3d(x, y, z, markersize=5, label="Vertices", color=:red, legend=:top)
+    if show_vertices
+        scatter3d(p, x, y, z, markersize=5, label="Vertices", color=:red, legend=:top)
+    end
 
     if show_edges
         # Plot edges
@@ -98,42 +100,45 @@ function visualize_cubical_complex(vertices, edges, squares, cubes; show_edges=t
             x_edge = [e[1][1], e[2][1]]
             y_edge = [e[1][2], e[2][2]]
             z_edge = [e[1][3], e[2][3]]
-            plot3d!(x_edge, y_edge, z_edge, color=edge_color, linewidth=2, label=false)
+            plot3d!(p, x_edge, y_edge, z_edge, color=edge_color, linewidth=2, label=false)
         end
     end
 
     # Plot squares (as filled quadrilaterals)
-    for sq in squares
-        x_square = [sq[i][1] for i in 1:4]  # Assume squares have 4 vertices
-        y_square = [sq[i][2] for i in 1:4]
-        z_square = [sq[i][3] for i in 1:4]
-        # Specify connections for the square faces
-        connections_square = [(1, 2, 3, 4)]  # Assuming square faces as quadrilaterals
-        mesh3d!(x_square, y_square, z_square, color=square_color, alpha=0.5, label=false, connections=connections_square)
-    end
-
-    # Plot cubes (as filled surfaces)
-    for c in cubes
-        # Extract cube faces and draw them
-        faces = [
-            [1, 2, 4, 3],  # Bottom face
-            [5, 6, 8, 7],  # Top face
-            [1, 2, 6, 5],  # Front face
-            [3, 4, 8, 7],  # Back face
-            [1, 3, 7, 5],  # Left face
-            [2, 4, 8, 6]   # Right face
-        ]
-        for face in faces
-            x_cube_face = [c[v][1] for v in face]
-            y_cube_face = [c[v][2] for v in face]
-            z_cube_face = [c[v][3] for v in face]
-            # Explicitly specify the connectivity for the cube faces
-            connections_cube = [(1, 2, 3, 4)]  # Assuming each face is a quadrilateral
-            mesh3d!(x_cube_face, y_cube_face, z_cube_face, color=cube_color, alpha=0.3, label=false, connections=connections_cube)
+    if show_squares
+        for sq in squares
+            x_square = [sq[i][1] for i in 1:4]  # Assume squares have 4 vertices
+            y_square = [sq[i][2] for i in 1:4]
+            z_square = [sq[i][3] for i in 1:4]
+            # Specify connections for the square faces
+            connections_square = [(1, 2, 3, 4)]  # Assuming square faces as quadrilaterals
+            mesh3d!(p, x_square, y_square, z_square, color=square_color, alpha=0.5, label=false, connections=connections_square)
         end
     end
 
-    display(plot!())
+    # Plot cubes (as filled surfaces)
+    if show_cubes
+        for c in cubes
+            # Extract cube faces and draw them
+            faces = [
+                [1, 2, 4, 3],  # Bottom face
+                [5, 6, 8, 7],  # Top face
+                [1, 2, 6, 5],  # Front face
+                [3, 4, 8, 7],  # Back face
+                [1, 3, 7, 5],  # Left face
+                [2, 4, 8, 6]   # Right face
+            ]
+            for face in faces
+                x_cube_face = [c[v][1] for v in face]
+                y_cube_face = [c[v][2] for v in face]
+                z_cube_face = [c[v][3] for v in face]
+                # Explicitly specify the connectivity for the cube faces
+                connections_cube = [(1, 2, 3, 4)]  # Assuming each face is a quadrilateral
+                mesh3d!(p, x_cube_face, y_cube_face, z_cube_face, color=cube_color, alpha=0.3, label=false, connections=connections_cube)
+            end
+        end
+    end
+    display(p)
 end
 
 

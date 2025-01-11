@@ -1,3 +1,4 @@
+using LinearAlgebra
 function create_torus_grid_3D(n)
     torus = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
 
@@ -107,14 +108,8 @@ function create_sphere_grid_3D(n::Int; radius=0)
 end
 
 function create_hollow_cube_grid_3D(n::Int; thickness=1)
-    grid = zeros(Int, n, n, n)  # Initialize all values to 0
-    for i in 1:n, j in 1:n, k in 1:n
-        if (i <= thickness || i > n - thickness ||
-            j <= thickness || j > n - thickness ||
-            k <= thickness || k > n - thickness)
-            grid[i, j, k] = 1  # Mark as present
-        end
-    end
+    grid = ones(Int, n, n, n)  # Initialize all values to 0
+    grid[1+thickness:(end-thickness), 1+thickness:(end-thickness), 1+thickness:(end-thickness)] .= 0
     return grid
 end
 

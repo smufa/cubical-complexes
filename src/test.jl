@@ -66,7 +66,7 @@ end
 
 using Plots
 
-function plot_persistent_homology(ph_data::Dict{Any, Any}; infinite_value=1e3)
+function plot_persistent_homology(ph_data; infinite_value=1e3)
     # Create arrays to store birth and death points for each dimension
     all_dims = keys(ph_data)
     colors = [:blue, :green, :red, :orange, :purple]  # Color for each dimension
@@ -98,20 +98,32 @@ function plot_persistent_homology(ph_data::Dict{Any, Any}; infinite_value=1e3)
 
     return plt
 end
+# torus = create_torus_grid_3D(5)
+# torus[4:6, :, :] .= 0
+torus = ones(Int64, 2,2,2)
 
 
+# (vertices, edges, squares, cubes) = cubical_complex(torus, 1)
+#
+# println(length(vertices))
+# println(length(edges))
+# println(length(squares))
+# println(length(cubes))
 
-initial_grid = create_torus_grid_3D(10)
-complexes = get_complexes(initial_grid, 10)
+# visualize
+# visualize_cubical_complex(vertices, edges, squares, cubes)
+# println(betti_numbers((vertices, edges, squares, cubes)))
+# initial_grid = create_random_grid_3D(10)
+# complexes = get_complexes(initial_grid, 10)
 
-for complex in complexes
-    (vertices, edges, squares, cubes) = complex
-    visualize_cubical_complex(vertices, edges, squares, cubes)
-end
+# for complex in complexes
+#     (vertices, edges, squares, cubes) = complex
+#     visualize_cubical_complex(vertices, edges, squares, cubes)
+# end
 
-ph = persistent_homology(complexes)
-println(ph)
-plot_persistent_homology(ph)
+# ph = persistent_homology(complexes)
+# println(ph)
+plot_persistent_homology(Dict(0=> [(0, Inf), (0, 4)], 1=> [(4, 8)], 2=> []), infinite_value=10)
 
 # for complex in complexes
 #     (vertices, edges, squares, cubes) = complex

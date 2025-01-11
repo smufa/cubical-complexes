@@ -92,7 +92,6 @@
         \item Define a grid structure (e.g., \( n \times n \)).
         \item Assign coordinates to vertices, edges, and squares.
         \item Ensure orientation is consistent (e.g., positive rotational order for squares).
-        \item Apply boundary conditions for chain construction.
     \end{enumerate}
 
     \vspace{1em}
@@ -144,10 +143,6 @@
     \end{itemize}
 \end{frame}
 
-%------------------------------------------------
-\section{Homology - What's different?}
-%------------------------------------------------
-
 \begin{frame}{Homology - What's different?}
     \textbf{How is computing homology different in this system?}
     \begin{itemize}
@@ -157,6 +152,28 @@
         \item Can be very hard as grids produce many simplicies even at small sizes.
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Homology Example}
+    \textbf{Sphere} - $b_0 = 1, b_1 = 0$
+    \vspace{1em}
+    \centering
+    \includegraphics[width=0.5\textwidth]{sphere.png}
+\end{frame}
+
+\begin{frame}{Homology Example}
+    \textbf{Hollow cube} - $b_0 = 1, b_1 = 0, b_2 = 1$
+    \vspace{1em}
+    \centering
+    \includegraphics[width=0.5\textwidth]{hollow_cube.png}
+\end{frame}
+
+\begin{frame}{Homology Example}
+    \textbf{Random grid} - $b_0 = 41, b_1 = 13$
+    \vspace{1em}
+    \centering
+    \includegraphics[width=0.5\textwidth]{random_grid.png}
+\end{frame}
+
 
 %------------------------------------------------
 \section{Persistent Homology}
@@ -177,5 +194,24 @@
     \end{enumerate}
 
 \end{frame}
+
+%------------------------------------------------
+\begin{frame}{Example of Persistent Homology}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.4\textwidth]{step1.png}\\
+        \vspace{0.5cm}
+        \includegraphics[width=0.4\textwidth]{step2.png}\\
+        \vspace{0.5cm}
+        \includegraphics[width=0.4\textwidth]{step3.png}
+        
+        \column{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{persistance.png}
+    \end{columns}
+\end{frame}
+%------------------------------------------------
+
 
 \end{document}

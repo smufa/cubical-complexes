@@ -42,7 +42,7 @@ function boundary_matrix(scx, n)
             for i in eachindex(boundary)
                 row_index = findfirst(==(boundary[i]), scx[n])
                 if row_index !== nothing
-                    Dn[row_index, j] = 1.0  # Replace 1.0 with -1.0 if needed
+                    Dn[row_index, j] = 1.0
                 end
             end
         end
