@@ -1,0 +1,52 @@
+
+\documentclass{article}
+\usepackage{amsmath} 
+\usepackage[affil-it]{authblk}
+
+\title{Cubical Complexes} % Sets article title
+\author{Enei Sluga, Simon Hehnen} % Sets authors name
+\affil
+{
+    Faculty of Computer and Information Science \\
+    University of Ljubljana % Your institution for the title page
+}
+\date{\today} % Sets date for date compiled
+
+\begin{document}
+    \maketitle
+
+    \section{Introduction}
+    In the realm of computation, many datasets are inherently discrete and structured in a
+    grid-like arrangement. Examples of such datasets include images and videos,
+    where we typically work with pixels organized on a two-dimensional grid.
+    When analyzing the structure of this data and constructing a simplicial complex,
+    traditional triangulations may not always be the most effective approach.
+    Instead, leveraging the pixels as fundamental building blocks could offer a
+    more suitable alternative.
+    
+    An additional advantage is that, unlike the floating-point values used in triangulations,
+    we work with discrete coordinates on a grid. This discretization can provide a
+    computational benefit, as we consistently construct cubical complexes in a fixed,
+    ordered manner, potentially offering increased efficiency over triangulation-based methods.
+    
+    \section{Generating Cubical Complexes}
+    TODO explain generation
+
+    \section{Computing Homology}
+    TODO explain how homolgy is computed
+
+    \section{Persistant Homology}
+    TODO persistant Homology
+
+    \section{Conclusion}
+    TODO Conclusion
+
+    \section{Division of Work}
+    Simon did the code for the creation of cubical complexes and constructed the examples.
+    Enei provided the code for Homology computation.
+    Persistant Homology was done by both together with the examples.
+
+    \section{Bibliography}*
+    We used the section on cubical complexes from the lecture script (P.106-108).
+
+\end{document}
