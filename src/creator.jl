@@ -28,18 +28,20 @@ function cubical_complex(input_grid)
         i, j, k = Tuple(I)
         if input_grid[i, j, k] > 0
             # Add the vertex
-            push!(vertices, (i*2, j*2, k*2))
+            push!(vertices, ((i-1)*2, (j-1)*2, (k-1)*2))
         end
     end
 
     # Extract edges
     for (x,y,z) in vertices
         if (x+2, y, z) in vertices
-            push!(edges, (x-1, y, z))
-        elseif (x, y+2, z) in vertices
-            push!(edges, (x, y-1, z))
-        elseif (x, y, z+2) in vertices
-            push!(edges, (x, y, z-1))
+            push!(edges, (x+1, y, z))
+        end
+        if (x, Int(y)+2, z) in vertices
+            push!(edges, (x, y+1, z))
+        end
+        if (x, y, z+2) in vertices
+            push!(edges, (x, y, z+1))
         end
     end
 
@@ -47,15 +49,16 @@ function cubical_complex(input_grid)
     for (x,y,z) in edges
         if isodd(x)
             # check for square in y direction
-            if (x-1, y+1, z) in vertices && (x+1, y+1, z) in vertices && (x, y+2, z) in vertices
+            if (x-1, y+1, z) in edges && (x+1, y+1, z) in edges && (x, y+2, z) in edges
                 push!(squares, (x, y+1, z))
+            end
             # check for square in z direction
-            elseif (x-1, y, z+1) in vertices && (x+1, y, z+1) in vertices && (x, y, z+2) in vertices
+            if (x-1, y, z+1) in edges && (x+1, y, z+1) in edges && (x, y, z+2) in edges
                 push!(squares, (x, y, z+1))
             end
         elseif isodd(y)
             # check for square in x direction
-            if (x, y-1, z+1) in vertices && (x, y+1, z+1) in vertices && (x+2, y, z) in vertices
+            if (x, y-1, z+1) in edges && (x, y+1, z+1) in edges && (x+2, y, z) in edges
                 push!(squares, (x+1, y, z))
             end
         end

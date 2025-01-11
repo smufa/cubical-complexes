@@ -1,6 +1,7 @@
 include("creator.jl")
 include("geometric_objects.jl")
 include("simplicial_homology_q.jl")
+include("visualization.jl")
 using Base.Iterators: filter
 
 function get_complexes(initial_grid, steps)
@@ -64,43 +65,29 @@ function persistent_homology(filtration)
     return persistence_pairs
 end
 
-using Plots
 
-function plot_persistent_homology(ph_data; infinite_value=1e3)
-    # Create arrays to store birth and death points for each dimension
-    all_dims = keys(ph_data)
-    colors = [:blue, :green, :red, :orange, :purple]  # Color for each dimension
-    max_dim = maximum(all_dims)
-    
-    plt = plot(title="Persistence Diagram", xlabel="Birth", ylabel="Death", legend=:topright)
+torus = create_sphere_grid_3D(10)
+easy = grid = zeros(Int, 2, 2, 2)
+easy[1,1,1] = 1
+easy[2,1,1] = 1
+easy[2,2,1] = 1
+easy[1,2,1] = 1
 
-    for (dim, points) in ph_data
-        if isempty(points)
-            continue
-        end
+easy[1,1,2] = 1
+easy[2,1,2] = 1
+easy[2,2,2] = 1
+easy[1,2,2] = 1
 
-        births, deaths = [], []
-        for (birth, death) in points
-            push!(births, birth)
-            if death == Inf
-                push!(deaths, infinite_value)  # Replace Inf with a large value
-            else
-                push!(deaths, death)
-            end
-        end
-
-        # Scatter plot for current dimension
-        scatter!(plt, births, deaths, label="Dim $dim", color=colors[dim+1])
-    end
-
-    # Add diagonal line to indicate birth = death
-    plot!(plt, [0, infinite_value], [0, infinite_value], lw=2, linestyle=:dash, label="Diagonal", color=:black)
-
-    return plt
-end
+cx = cubical_complex(easy)
+(a, b, c, d) = cx
+println(a)
+println(b)
+println(c)
+println(d)
 
 
-torus = create_torus_grid_3D(5)
-
-(vertices, edges, squares, cubes) = cubical_complex(torus)
-println((vertices, edges, squares, cubes))
+println(length(a))
+println(length(b))
+println(length(c))
+println(length(d))
+# visualize_qcx(cx, show_vertices=true, show_edges=true, show_cubes=true, show_squares=true)
