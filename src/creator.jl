@@ -58,17 +58,16 @@ function cubical_complex(input_grid)
             end
         elseif isodd(y)
             # check for square in x direction
-            if (x, y-1, z+1) in edges && (x, y+1, z+1) in edges && (x+2, y, z) in edges
-                push!(squares, (x+1, y, z))
+            if (x, y-1, z+1) in edges && (x, y+1, z+1) in edges && (x, y, z+2) in edges
+                push!(squares, (x, y, z+1))
             end
         end
     end
 
     # extract cubes
     for (x,y,z) in squares
-        #check for cube
         if isodd(x) && isodd(y)
-            if (x,y,z+2) in squares && (x+1,y+1,z) in squares && (x-1,y+1,z) in squares && (x,y-1,z+1) in squares && (x,y+1,z+1) in squares
+            if (x,y,z+2) in squares && (x,y-1,z+1) in squares && (x,y+1,z+1) in squares && (x-1,y,z+1) in squares && (x+1,y,z+1) in squares
                 push!(cubes, (x,y,z+1))
             end
         end
