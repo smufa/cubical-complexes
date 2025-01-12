@@ -1,4 +1,4 @@
-function parse_im_data(file_path, scale_factor=4)
+function parse_im_data(file_path)
     # Open the file for reading
     open(file_path, "r") do fid
         # Skip the 1024-byte header

@@ -78,16 +78,11 @@ easy[2,1,2] = 1
 easy[2,2,2] = 1
 easy[1,2,2] = 1
 
-cx = cubical_complex(easy)
+cx = cubical_complex(parse_im_data("resources/cupsIm/b11.im"))
 (a, b, c, d) = cx
-println(a)
-println(b)
-println(c)
-println(d)
+println("vertices: ", a)
+println("edges: ", b)
+println("squares: ", c)
+println("cubes: ", d)
 
-
-println(length(a))
-println(length(b))
-println(length(c))
-println(length(d))
-# visualize_qcx(cx, show_vertices=true, show_edges=true, show_cubes=true, show_squares=true)
+visualize_qcx(cx, show_vertices=true, show_edges=true, show_cubes=true, show_squares=false)

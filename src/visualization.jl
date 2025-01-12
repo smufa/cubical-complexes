@@ -30,27 +30,45 @@ function visualize_qcx((vertices, edges, squares, cubes);
     end
 
     # Plot squares
-    if show_squares
+    if show_squares || show_cubes
         for (x, y, z) in squares
-            points = []
+            corners_x = []
+            corners_y = []
+            corners_z = []
             if iseven(x)
-                push!(points, (x,y+2,z+2))
-                push!(points, (x,y+2,z))
-                push!(points, (x,y,z+2))
+                append!(corners_x, [Int(x/2), Int(x/2),Int(x/2),Int(x/2)])
+                append!(corners_y, [y, y-1,y-1,y])
+                append!(corners_z, [z, z-1,z,z-1])
             elseif iseven(y)
-                push!(points, (x+2,y,z))
-                push!(points, (x,y,z+2))
-                push!(points, (x+2,y,z+2))
-            else
-                push!(points, (x+2,y,z))
-                push!(points, (x,y+2,z))
-                push!(points, (x+2,y+2,z))
+                append!(corners_x, [x, x-1,x-1,x])
+                append!(corners_y, [Int(y/2), Int(y/2), Int(y/2), Int(y/2)])
+                append!(corners_z, [z, z-1,z,z-1])
+            elseif iseven(z)
+                append!(corners_x, [x, x-1,x-1,x])
+                append!(corners_y, [y, y-1,y,y-1])
+                append!(corners_z, [Int(z/2), Int(z/2),Int(z/2),Int(z/2)])
+            end
+            
+            if show_squares
+                mesh3d!(p, corners_x, corners_y, corners_z, color=:lightblue, alpha=0.5, label=false, connections= [(1, 3, 2, 4)] )
+            end
+
+            if show_cubes
+                if iseven(x)
+                    if((x+1, y, z) in cubes) || (x-1, y, z) in cubes
+                        mesh3d!(p, corners_x, corners_y, corners_z, color=:green, alpha=0.4, label=false, connections= [(1, 3, 2, 4)] )
+                    end
+                elseif iseven(y)
+                    if((x, y+1, z) in cubes) || (x, y-1, z) in cubes
+                        mesh3d!(p, corners_x, corners_y, corners_z, color=:green, alpha=0.4, label=false, connections= [(1, 3, 2, 4)] )
+                    end
+                elseif iseven(z)
+                    if((x, y, z+1) in cubes) || (x, y, z-1) in cubes
+                        mesh3d!(p, corners_x, corners_y, corners_z, color=:green, alpha=0.4, label=false, connections= [(1, 3, 2, 4)] )
+                    end
+                end
             end
         end
-    end
-
-    # Plot cubes
-    if show_cubes
     end
     
     # Show the plot
