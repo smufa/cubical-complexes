@@ -17,7 +17,52 @@ function parse_im_data(file_path)
     end
 end
 
-function cubical_complex(input_grid)
+function downscale_grid(grid, factor; rule=:majority)
+    for f in 1:factor
+        dims = size(grid)
+        if any(d % 2 != 0 for d in dims)
+            error("Grid dimensions must be divisible by 2 at every step.")
+        end
+        
+        # New dimensions after merging 2x2x2 blocks
+        new_dims = div.(dims, 2)
+        new_grid = zeros(Int, new_dims...)
+        
+        # Iterate over the new grid positions
+        for i in 1:new_dims[1], j in 1:new_dims[2], k in 1:new_dims[3]
+            # Extract the 2x2x2 block
+            block = grid[
+                (i-1)*2+1:i*2,
+                (j-1)*2+1:j*2,
+                (k-1)*2+1:k*2
+            ]
+            
+            # Apply the rule to determine the new value
+            if rule == :majority
+                new_grid[i, j, k] = sum(block) > 4 ? 1 : 0
+            elseif rule == :max
+                new_grid[i, j, k] = maximum(block)
+            elseif rule == :min
+                new_grid[i, j, k] = minimum(block)
+            elseif rule == :random
+                new_grid[i, j, k] = block[rand(1:end)]
+            else
+                error("Unknown rule: $rule")
+            end
+        end
+        
+        # Replace the original grid with the new downscaled grid
+        grid = new_grid
+    end
+    
+    return grid
+end
+
+
+function cubical_complex(input_grid, factor=0; rule=:min)
+    #scale down by a factor
+    input_grid = downscale_grid(input_grid, factor, rule=rule)
+    println(input_grid)
     vertices = []
     edges = []
     squares = []

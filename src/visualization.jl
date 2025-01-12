@@ -2,8 +2,8 @@ using Plots
 using LinearAlgebra
 
 function visualize_qcx((vertices, edges, squares, cubes); 
-                       show_vertices=true, show_edges=true, 
-                       show_squares=false, show_cubes=false)
+                       show_vertices=false, show_edges=true, 
+                       show_squares=true, show_cubes=false)
     # Create an empty 3D plot
     p = plot(legend=false, size=(800, 600), xlabel="X", ylabel="Y", zlabel="Z", camera=(30,30))
     
@@ -37,15 +37,15 @@ function visualize_qcx((vertices, edges, squares, cubes);
             corners_z = []
             if iseven(x)
                 append!(corners_x, [Int(x/2), Int(x/2),Int(x/2),Int(x/2)])
-                append!(corners_y, [y, y-1,y-1,y])
-                append!(corners_z, [z, z-1,z,z-1])
+                append!(corners_y, [(y+1)/2, (y-1)/2,(y+1)/2,(y-1)/2])
+                append!(corners_z, [(z+1)/2, (z-1)/2,(z-1)/2,(z+1)/2])
             elseif iseven(y)
-                append!(corners_x, [x, x-1,x-1,x])
+                append!(corners_x, [(x+1)/2, (x-1)/2,(x+1)/2,(x-1)/2])
                 append!(corners_y, [Int(y/2), Int(y/2), Int(y/2), Int(y/2)])
-                append!(corners_z, [z, z-1,z,z-1])
+                append!(corners_z, [(z+1)/2, (z-1)/2,(z-1)/2,(z+1)/2])
             elseif iseven(z)
-                append!(corners_x, [x, x-1,x-1,x])
-                append!(corners_y, [y, y-1,y,y-1])
+                append!(corners_x, [(x+1)/2, (x-1)/2,(x-1)/2,(x+1)/2])
+                append!(corners_y, [(y+1)/2, (y-1)/2,(y+1)/2,(y-1)/2])
                 append!(corners_z, [Int(z/2), Int(z/2),Int(z/2),Int(z/2)])
             end
             

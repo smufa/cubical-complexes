@@ -6,8 +6,8 @@ using Base.Iterators: filter
 
 function get_complexes(initial_grid, steps)
     complexes = []
-    for threshold in 1:steps
-        push!(complexes, cubical_complex(initial_grid, threshold))
+    for threshold in 0:steps
+        push!(complexes, cubical_complex(initial_grid, threshold, rule=:min))
     end
 
     return complexes
@@ -67,22 +67,14 @@ end
 
 
 torus = create_sphere_grid_3D(10)
-easy = grid = zeros(Int, 2, 2, 2)
-easy[1,1,1] = 1
-easy[2,1,1] = 1
-easy[2,2,1] = 1
-easy[1,2,1] = 1
+easy = grid = zeros(Int, 4, 4, 4)
+easy[3,3,3] = 1
+easy[4,3,3] = 1
+easy[4,4,3] = 1
+easy[3,4,3] = 1
 
-easy[1,1,2] = 1
-easy[2,1,2] = 1
-easy[2,2,2] = 1
-easy[1,2,2] = 1
+# persistent_homology(get_complexes(torus, 2))
 
-cx = cubical_complex(parse_im_data("resources/cupsIm/b11.im"))
-(a, b, c, d) = cx
-println("vertices: ", a)
-println("edges: ", b)
-println("squares: ", c)
-println("cubes: ", d)
+cx = cubical_complex(torus)
 
-visualize_qcx(cx, show_vertices=true, show_edges=true, show_cubes=true, show_squares=false)
+visualize_qcx(cx)

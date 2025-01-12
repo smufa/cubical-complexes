@@ -95,7 +95,7 @@ function create_projective_plane_boundary(n)
     return (edges, squares)
 end
 
-function create_sphere_grid_3D(n::Int; radius=0)
+function create_sphere_grid_3D(n::Int; radius=4)
     grid = zeros(Int, n, n, n)  # Initialize all values to 0
     center = (div(n, 2), div(n, 2), div(n, 2))
     radius = radius > 0 ? radius : div(n, 3)
