@@ -66,15 +66,11 @@ function persistent_homology(filtration)
 end
 
 
-torus = create_sphere_grid_3D(10)
-easy = grid = zeros(Int, 4, 4, 4)
-easy[3,3,3] = 1
-easy[4,3,3] = 1
-easy[4,4,3] = 1
-easy[3,4,3] = 1
+# Now the more intersting object:
+intersting_object = create_hollow_cube_with_holes_and_hollow_inner_cube(16, thickness=1, inner_edge_length=4, hole_edge_length=1)
 
-# persistent_homology(get_complexes(torus, 2))
+cx = cubical_complex(intersting_object, 1; rule=:max)
 
-cx = cubical_complex(torus)
+println(betti_numbers(cx))
 
-visualize_qcx(cx)
+visualize_qcx(cx, show_squares=false)

@@ -30,7 +30,17 @@
     ordered manner, potentially offering increased efficiency over triangulation-based methods.
     
     \section{Generating Cubical Complexes}
-    TODO explain generation
+    From the script we know that a \textbf{cubical complex} $K$ on an $n \times n$ grid
+    is a collection of cubes such that $\sigma \in K$ and $\tau \subseteq \sigma$, then $\tau \in K$.
+    In this case $n \in \mathbf{N}$ refers to the number of square along each side.
+    Our grid has size $n \times n$. This means the collection of all simplices has the following attributes:
+    \begin{enumerate}
+        \item 0-dimensional cubes: $(n+1)^2$ verticies
+        \item 1-dimensional cubes: $2n(n+1)$ edges
+        \item 2-dimensional cubes: $n^2$ squares
+    \end{enumerate}
+
+
 
     \section{Computing Homology}
     TODO explain how homolgy is computed

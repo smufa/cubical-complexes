@@ -1,4 +1,5 @@
 using LinearAlgebra
+
 function create_torus_grid_3D(n)
     torus = zeros(Int, n, n, n)  # Create a 3D grid of size n x n x n
 
@@ -131,5 +132,45 @@ function create_random_grid_3D(n::Int; density=0.1)
             grid[i, j, k] = 1  # Mark as present
         end
     end
+    return grid
+end
+
+function create_hollow_cube_with_holes_and_hollow_inner_cube(
+    n::Int; thickness=1, inner_edge_length=3, inner_thickness=1, hole_edge_length=1
+)
+    # Initialize the grid with all ones (outer cube)
+    grid = ones(Int, n, n, n)
+    
+    # Create the hollow part of the outer cube
+    grid[1+thickness:(end-thickness), 1+thickness:(end-thickness), 1+thickness:(end-thickness)] .= 0
+    
+    # Add holes to each face of the outer cube
+    hole_start = div(n - hole_edge_length, 2) + 1
+    hole_end = hole_start + hole_edge_length - 1
+    
+    # Front and back faces (x-y plane at z=1 and z=n)
+    grid[:, hole_start:hole_end, 1] .= 0
+    grid[:, hole_start:hole_end, n] .= 0
+    
+    # Left and right faces (y-z plane at x=1 and x=n)
+    grid[1, hole_start:hole_end, :] .= 0
+    grid[n, hole_start:hole_end, :] .= 0
+    
+    # Top and bottom faces (x-z plane at y=1 and y=n)
+    grid[hole_start:hole_end, 1, :] .= 0
+    grid[hole_start:hole_end, n, :] .= 0
+    
+    # Add the inner hollow cube
+    center_start = div(n - inner_edge_length, 2) + 1
+    center_end = center_start + inner_edge_length - 1
+    grid[center_start:center_end, center_start:center_end, center_start:center_end] .= 1  # Inner cube outer shell
+    
+    # Hollow out the inner cube
+    inner_hollow_start = center_start + inner_thickness
+    inner_hollow_end = center_end - inner_thickness
+    if inner_hollow_start <= inner_hollow_end
+        grid[inner_hollow_start:inner_hollow_end, inner_hollow_start:inner_hollow_end, inner_hollow_start:inner_hollow_end] .= 0
+    end
+    
     return grid
 end

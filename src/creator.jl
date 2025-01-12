@@ -62,7 +62,6 @@ end
 function cubical_complex(input_grid, factor=0; rule=:min)
     #scale down by a factor
     input_grid = downscale_grid(input_grid, factor, rule=rule)
-    println(input_grid)
     vertices = []
     edges = []
     squares = []
