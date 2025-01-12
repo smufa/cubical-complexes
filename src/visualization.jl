@@ -1,4 +1,61 @@
 using Plots
+using LinearAlgebra
+
+function visualize_qcx((vertices, edges, squares, cubes); 
+                       show_vertices=true, show_edges=true, 
+                       show_squares=false, show_cubes=false)
+    # Create an empty 3D plot
+    p = plot(legend=false, size=(800, 600), xlabel="X", ylabel="Y", zlabel="Z", camera=(30,30))
+    
+    # Plot vertices
+    if show_vertices
+        xs, ys, zs = [v[1]/2 for v in vertices], [v[2]/2 for v in vertices], [v[3]/2 for v in vertices]
+        scatter!(p, xs, ys, zs, marker=:circle, color=:red, label="Vertices", markersize=4)
+    end
+    
+    # Plot edges
+    if show_edges
+        for (x, y, z) in edges
+            # Each edge can be drawn as a line between two connected vertices
+            if isodd(x)
+                plot3d!(p, [(x-1)/2, (x-1)/2+1], [y/2, y/2], [z/2, z/2], linewidth=2, color=:blue, label="Edges")
+            end
+            if isodd(y)
+                plot3d!(p, [x/2, x/2], [(y-1)/2, (y-1)/2+1], [z/2, z/2], linewidth=2, color=:blue, label="Edges")
+            end
+            if isodd(z)
+                plot3d!(p, [x/2, x/2], [y/2, y/2], [(z-1)/2, (z-1)/2+1], linewidth=2, color=:blue, label="Edges")
+            end
+        end
+    end
+
+    # Plot squares
+    if show_squares
+        for (x, y, z) in squares
+            points = []
+            if iseven(x)
+                push!(points, (x,y+2,z+2))
+                push!(points, (x,y+2,z))
+                push!(points, (x,y,z+2))
+            elseif iseven(y)
+                push!(points, (x+2,y,z))
+                push!(points, (x,y,z+2))
+                push!(points, (x+2,y,z+2))
+            else
+                push!(points, (x+2,y,z))
+                push!(points, (x,y+2,z))
+                push!(points, (x+2,y+2,z))
+            end
+        end
+    end
+
+    # Plot cubes
+    if show_cubes
+    end
+    
+    # Show the plot
+    display(p)
+end
 
 function plot_persistent_homology(ph_data; infinite_value=1e3)
     # Create arrays to store birth and death points for each dimension
@@ -31,48 +88,4 @@ function plot_persistent_homology(ph_data; infinite_value=1e3)
     plot!(plt, [0, infinite_value], [0, infinite_value], lw=2, linestyle=:dash, label="Diagonal", color=:black)
 
     return plt
-end
-
-function visualize_qcx((vertices, edges, squares, cubes); show_vertices=true, show_edges=true, show_cubes=false, show_squares=false, edge_color=:blue, square_color=:lightblue, cube_color=:lightgreen)
-    p = plot!()
-    verticies_x = []
-    verticies_y = []
-    verticies_z = []
-    if show_vertices
-        for (x, y, z) in vertices
-            push!(verticies_x, (x/2))
-            push!(verticies_y, (y/2))
-            push!(verticies_z, (z/2))
-        end
-        scatter3d(p, verticies_x, verticies_y, verticies_z, markersize=5, label="Vertices", color=:red)
-    end
-
-    if show_edges
-        for (x, y, z) in edges
-            if isodd(x)
-                x_edge = (Int(((x-1)/2)), Int(((x-1)/2) + 1))
-                y_edge = (Int((y/2)), Int((y/2)))
-                z_edge = (Int((z/2)), Int((z/2)))
-            elseif isodd(y)
-                x_edge = (Int((x/2)), Int((x/2)))
-                y_edge = (Int(((y - 1)/2)), Int(((y - 1)/2) + 1))
-                z_edge = (Int((z/2)), Int((z/2)))
-            else
-                x_edge = (Int((x/2)), Int((x/2)))
-                y_edge = (Int((y/2)), Int((y/2)))
-                z_edge = (Int(((z - 1)/2)), Int(((z - 1)/2) + 1))
-            end
-            plot3d!(p, x_edge, y_edge, z_edge, color=edge_color, linewidth=2, label=false)
-        end
-    end
-
-    if show_squares
-
-    end
-
-    if show_cubes
-
-    end
-
-    display(p)
 end
